@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>消費偵探商店街</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="game-shell">
+
+    <!-- 首頁 / 輸入名字 -->
+    <section id="startScreen" class="screen start-screen">
+      <div class="start-card">
+        <div class="game-badge">第二單元｜消費與理財</div>
+
+        <h1>消費偵探商店街</h1>
+        <p class="subtitle">
+          看照片、讀線索、做選擇，成為聰明消費與理財小偵探！
+        </p>
+
+        <div class="intro-box">
+          <p>
+            歡迎來到「消費偵探商店街」！
+            這裡每天都會發生不同的消費案件：
+            有人不知道該怎麼付款，有人買東西只看喜不喜歡，
+            有人網購遇到問題，也有人想存錢卻不知道怎麼規劃。
+          </p>
+          <p>
+            請輸入你的偵探名字，開始探索商店街，完成 10 個任務，
+            收集偵探道具，最後取得「理財金牌偵探證書」。
+          </p>
+        </div>
+
+        <label for="playerNameInput" class="input-label">請輸入你的偵探名字</label>
+        <input
+          id="playerNameInput"
+          class="name-input"
+          type="text"
+          maxlength="12"
+          placeholder="例如：小恩"
+        />
+
+        <div class="start-actions">
+          <button id="startGameBtn" class="primary-btn">開始探索</button>
+          <button id="continueGameBtn" class="secondary-btn">繼續上次進度</button>
+        </div>
+
+        <p class="small-note">
+          小提醒：進度會存在這台電腦或平板的瀏覽器中。
+        </p>
+      </div>
+    </section>
+
+    <!-- 地圖畫面 -->
+    <section id="mapScreen" class="screen map-screen hidden">
+      <header class="top-bar">
+        <div>
+          <h2>消費偵探商店街</h2>
+          <p id="playerStatus" class="player-status">🕵️ 小小偵探</p>
+        </div>
+
+        <div class="top-actions">
+          <button id="showBagBtn" class="small-btn">🎒 偵探背包</button>
+          <button id="resetGameBtn" class="small-btn danger-btn">重新開始</button>
+        </div>
+      </header>
+
+      <main class="map-layout">
+        <section class="map-panel">
+          <div class="map-title-row">
+            <h3>商店街地圖</h3>
+            <p>使用方向鍵、WASD，或下方按鈕移動小偵探。</p>
+          </div>
+
+          <div id="mapGrid" class="map-grid" aria-label="商店街地圖">
+            <!-- JavaScript 會自動產生地圖格子 -->
+          </div>
+
+          <div class="mobile-controls" aria-label="方向控制按鈕">
+            <button class="move-btn" data-direction="up">▲</button>
+            <div class="middle-controls">
+              <button class="move-btn" data-direction="left">◀</button>
+              <button class="center-dot" disabled>🕵️</button>
+              <button class="move-btn" data-direction="right">▶</button>
+            </div>
+            <button class="move-btn" data-direction="down">▼</button>
+          </div>
+        </section>
+
+        <aside class="side-panel">
+          <div class="info-card">
+            <h3 id="tileTitle">中央廣場</h3>
+            <p id="tileDescription">
+              你站在消費偵探商店街的中央廣場。移動小偵探，走到不同地點調查消費案件。
+            </p>
+            <button id="startMissionFromTileBtn" class="primary-btn hidden">
+              查看場景
+            </button>
+          </div>
+
+          <div class="bag-card">
+            <div class="bag-header">
+              <h3>🎒 偵探背包</h3>
+              <span id="bagProgress">0 / 10</span>
+            </div>
+            <div id="bagItems" class="bag-items">
+              <!-- JavaScript 會自動產生道具 -->
+            </div>
+          </div>
+        </aside>
+      </main>
+    </section>
+
+    <!-- 任務畫面 -->
+    <section id="missionScreen" class="screen mission-screen hidden">
+      <header class="mission-header">
+        <button id="backToMapBtn" class="secondary-btn">← 回到地圖</button>
+        <div>
+          <p id="missionLocation" class="mission-location">任務地點</p>
+          <h2 id="missionTitle">任務名稱</h2>
+        </div>
+      </header>
+
+      <div class="reading-helper">
+        <div>
+          <strong>🔊 閱讀輔助</strong>
+          <span>可以讓老師語音朗讀任務、短文、題目與選項。</span>
+        </div>
+
+        <div class="reading-helper-buttons">
+          <button id="readMissionBtn" class="read-btn">老師朗讀任務內容</button>
+          <button id="readQuestionBtn" class="read-btn">朗讀題目與選項</button>
+          <button id="stopReadingBtn" class="read-btn stop-read-btn">停止朗讀</button>
+        </div>
+      </div>
+
+      <main class="mission-layout">
+        <section class="mission-content-card">
+
+          <div class="mission-task-large">
+            <figure>
+              <img id="missionTaskImage" src="" alt="任務線索圖" />
+              <figcaption>任務圖｜請仔細觀察照片線索再回答問題</figcaption>
+            </figure>
+          </div>
+
+          <div class="story-box">
+            <h3>任務檔案</h3>
+            <p id="missionIntro">任務開場文字</p>
+          </div>
+
+          <div class="reading-box">
+            <h3>閱讀短文</h3>
+            <p id="missionStory">閱讀短文內容</p>
+          </div>
+
+          <div class="keyword-box">
+            <h3>關鍵字</h3>
+            <div id="keywordList" class="keyword-list">
+              <!-- JavaScript 會自動產生關鍵字 -->
+            </div>
+          </div>
+        </section>
+
+        <section class="question-card">
+          <div class="question-top">
+            <h3>偵探任務</h3>
+            <p id="questionProgress">第 1 / 3 題</p>
+          </div>
+
+          <p id="questionText" class="question-text">題目文字</p>
+
+          <div id="choicesArea" class="choices-area">
+            <!-- JavaScript 會自動產生選項 -->
+          </div>
+
+          <div id="feedbackBox" class="feedback-box hidden">
+            <p id="feedbackText"></p>
+          </div>
+
+          <div class="question-actions">
+            <button id="nextQuestionBtn" class="primary-btn hidden">下一題</button>
+            <button id="finishMissionBtn" class="primary-btn hidden">收下道具，回到商店街</button>
+          </div>
+        </section>
+      </main>
+    </section>
+
+    <!-- 關卡場景彈出視窗 -->
+    <div id="sceneModal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="scene-modal-card">
+        <button id="closeSceneModalBtn" class="close-btn">×</button>
+
+        <div class="scene-preview-layout">
+          <figure class="scene-preview-figure">
+            <img id="scenePreviewImage" src="" alt="關卡場景圖" />
+            <figcaption>關卡場景圖</figcaption>
+          </figure>
+
+          <div class="scene-preview-info">
+            <p id="scenePreviewLocation" class="scene-preview-location">任務地點</p>
+            <h2 id="scenePreviewTitle">關卡名稱</h2>
+            <p id="scenePreviewText">
+              觀察這個場景，準備開始任務。
+            </p>
+
+            <div class="speech-actions">
+              <button id="readSceneBtn" class="read-btn">🔊 老師朗讀場景</button>
+              <button id="stopSceneReadingBtn" class="read-btn stop-read-btn">停止朗讀</button>
+            </div>
+
+            <button id="scenePreviewStartBtn" class="primary-btn">
+              開始任務
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 背包彈出視窗 -->
+    <div id="bagModal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <button id="closeBagModalBtn" class="close-btn">×</button>
+        <h2>🎒 偵探背包</h2>
+        <p>
+          每完成一個任務，就能獲得一個偵探道具。
+          收集全部 10 個道具後，就能取得理財金牌偵探證書。
+        </p>
+        <div id="bagModalItems" class="bag-modal-items">
+          <!-- JavaScript 會自動產生背包內容 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 證書畫面 -->
+    <section id="certificateScreen" class="screen certificate-screen hidden">
+      <div class="certificate-actions no-print">
+        <button id="backToMapFromCertificateBtn" class="secondary-btn">← 回到商店街</button>
+        <button id="printCertificateBtn" class="primary-btn">列印證書 / 另存 PDF</button>
+      </div>
+
+      <div id="certificateCard" class="certificate-card">
+        <div class="certificate-border">
+          <p class="certificate-small-title">消費偵探商店街</p>
+          <h1>理財金牌偵探證書</h1>
+
+          <p class="certificate-text">茲證明</p>
+
+          <div id="certificateName" class="certificate-name">
+            小小偵探
+          </div>
+
+          <p class="certificate-text">
+            完成《消費偵探商店街》全部任務，<br />
+            學會理性消費、消費安全、記帳規劃、<br />
+            家庭理財與風險判斷，並成功收集 10 個偵探道具。
+          </p>
+
+          <p class="certificate-award">特頒此證，授予：</p>
+          <div class="certificate-title">💰 理財金牌偵探</div>
+
+          <div id="certificateRewards" class="certificate-rewards">
+            <!-- JavaScript 會自動放入 10 個道具 -->
+          </div>
+
+          <p id="certificateDate" class="certificate-date">
+            完成日期：
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="data.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
